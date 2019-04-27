@@ -4,7 +4,7 @@ describe Game do
   let(:game) { Game.new }
 
   before do
-    game.setup(width: 5, height: 10)
+    game.setup(width: 10, height: 8)
   end
 
   let(:snake_id) { game.spawn_snake("mike", x: 2, y: 3) }
@@ -57,16 +57,64 @@ describe Game do
   end
 
   describe "collisions" do
-    context "when running off the board" do
+    context 'when there is no collision' do
+      let!(:other_snake_uuid) { game.spawn_snake("other", x: 3, y: 3) }
 
+      before do
+        game.add_intent(snake_id, 'N')
+        game.add_intent(other_snake_uuid, 'E')
+      end
+
+      it 'should do nothing' do
+        game.tick
+
+        expect(game.snakes.length).to eq(2)
+        expect(game.dead_snakes).to be_empty
+      end
+    end
+
+    context "when running off the board or into an obstacle" do
+      before do
+        game.world[3][3].type = :wall
+        game.add_intent(snake_id, 'E')
+      end
+
+      it 'should kill the snake' do
+        game.tick
+
+        expect(game.dead_snakes.length).to eq(1)
+        expect(game.snakes).to be_empty
+      end
     end
 
     context "when colliding with another snake" do
+      let!(:other_snake_uuid) { game.spawn_snake("other", x: 3, y: 3) }
 
+      before do
+        game.add_intent(snake_id, 'E')
+        game.add_intent(other_snake_uuid, 'N')
+      end
+
+      it 'should kill the snake that is colliding' do
+        game.tick
+
+        expect(game.snakes.map(&:uuid)).to eq([other_snake_uuid])
+        expect(game.dead_snakes.length).to eq(1)
+      end
     end
 
     context "when colliding with self" do
+      before do
+        snake.segments = [game.world[3][1]]
+        game.add_intent(snake_id, 'W')
+      end
 
+      it 'should kill the snake' do
+        game.tick
+
+        expect(game.snakes).to be_empty
+        expect(game.dead_snakes.length).to eq(1)
+      end
     end
 
     context "when a head on collision" do

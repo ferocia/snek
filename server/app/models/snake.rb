@@ -1,7 +1,7 @@
 require 'securerandom'
 
 class Snake
-  attr_accessor :name, :uuid, :head, :intent, :last_intent
+  attr_accessor :name, :uuid, :head, :intent, :last_intent, :segments
 
   def initialize(name:, initial_position:)
     @name = name
@@ -29,9 +29,9 @@ class Snake
 
   def collides_with?(other)
     tiles_to_check_for_collisions = if self == other
-      @segments
+      @segments.include?(@head)
     else
-      other.occupied_space
+      other.occupied_space.include?(@head)
     end
   end
 
