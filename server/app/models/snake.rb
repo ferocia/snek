@@ -22,4 +22,20 @@ class Snake
   def length
     @segments.count + 1
   end
+
+  def ==(other)
+    @uuid == other.uuid
+  end
+
+  def collides_with?(other)
+    tiles_to_check_for_collisions = if self == other
+      @segments
+    else
+      other.occupied_space
+    end
+  end
+
+  def occupied_space
+    [@head] + @segments
+  end
 end

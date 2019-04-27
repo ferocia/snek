@@ -55,4 +55,34 @@ describe Game do
       end
     end
   end
+
+  describe "collisions" do
+    context "when running off the board" do
+
+    end
+
+    context "when colliding with another snake" do
+
+    end
+
+    context "when colliding with self" do
+
+    end
+
+    context "when a head on collision" do
+      let!(:other_snake_uuid) { game.spawn_snake("other", x: 3, y: 3) }
+
+      before do
+        game.add_intent(snake_id, 'E')
+        game.add_intent(other_snake_uuid, 'W')
+      end
+
+      it 'should kill both snakes' do
+        game.tick
+
+        expect(game.snakes).to be_empty
+        expect(game.dead_snakes.length).to eq(2)
+      end
+    end
+  end
 end

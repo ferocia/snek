@@ -1,9 +1,10 @@
 class Game
-  attr_accessor :world, :iteration, :snakes
+  attr_accessor :world, :iteration, :snakes, :dead_snakes
 
   def setup(width: 100, height: 100)
     @iteration = 0
     @snakes = []
+    @dead_snakes = []
     @width = width
     @height = height
     @world = Array.new(width) {|x| Array.new(height) {|y| Tile.new(x: x, y: y) } }
@@ -59,6 +60,9 @@ class Game
   end
 
   def kill_colliding_snakes
+    dying_snakes = @snakes.select do |snake|
+      @snakes.detect{|s| snake.collides_with?(s) }
+    end
   end
 
   def safe_spawn_point
