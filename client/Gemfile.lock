@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    action_cable_client (3.0.1)
+      websocket-eventmachine-client (>= 1.2.0)
+    eventmachine (1.2.7)
+    websocket (1.2.8)
+    websocket-eventmachine-base (1.2.0)
+      eventmachine (~> 1.0)
+      websocket (~> 1.0)
+      websocket-native (~> 1.0)
+    websocket-eventmachine-client (1.2.0)
+      websocket-eventmachine-base (~> 1.0)
+    websocket-native (1.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  action_cable_client
+
+BUNDLED WITH
+   1.16.3

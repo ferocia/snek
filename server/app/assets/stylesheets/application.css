@@ -16,6 +16,7 @@
 
 .map {
   width: 75%;
+  max-height: 100vh;
 }
 
 .tile {
