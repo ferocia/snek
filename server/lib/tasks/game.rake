@@ -4,7 +4,7 @@ namespace :game do
     game.setup
     loop do
       game.tick
-      ActionCable.server.broadcast 'viewer_channel', {state: game.to_s}
+      ActionCable.server.broadcast 'viewer_channel', game
       sleep 1
     end
   end

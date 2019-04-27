@@ -1,6 +1,8 @@
 require 'securerandom'
 
 class Snake
+  include ActiveModel::Serialization
+
   attr_accessor :name, :uuid, :head, :intent, :last_intent, :segments
 
   def initialize(name:, initial_position:)

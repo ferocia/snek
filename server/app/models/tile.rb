@@ -1,4 +1,6 @@
 class Tile
+  include ActiveModel::Serialization
+
   attr_accessor :x, :y, :type
 
   def initialize(x:, y:, type:)
@@ -9,6 +11,10 @@ class Tile
 
   def inspect
     "<#{x},#{y} - #{to_s}>"
+  end
+
+  def as_json(options = nil)
+    to_s
   end
 
   def to_s

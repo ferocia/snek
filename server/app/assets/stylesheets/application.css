@@ -13,3 +13,27 @@
  *= require_tree .
  *= require_self
  */
+
+.map {
+  width: 75%;
+}
+
+.tile {
+  flex: 1 0 auto;
+  height:auto;
+  min-width: 1px;
+}
+.tile:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.wall {
+  background: #333;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+}

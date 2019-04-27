@@ -1,4 +1,5 @@
 class Game
+  include ActiveModel::Serialization
   attr_accessor :world, :iteration, :snakes, :dead_snakes
 
   def setup(width: 100, height: 100)
@@ -57,6 +58,13 @@ class Game
     end
 
     chars.map{|row| row.join }.join("\n")
+  end
+
+  def as_json(options = nil)
+    {
+      map: @world,
+      snakes: @snakes
+    }
   end
 
   private
