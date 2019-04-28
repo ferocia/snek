@@ -7,7 +7,7 @@ describe Game do
     game.setup(width: 10, height: 8)
   end
 
-  let(:snake_id) { game.spawn_snake("mike", x: 2, y: 3) }
+  let(:snake_id) { game.spawn_test_snake("mike", x: 2, y: 3) }
   let(:snake) { game.find_snake(snake_id) }
 
   describe "snake movement" do
@@ -58,7 +58,7 @@ describe Game do
 
   describe "collisions" do
     context 'when there is no collision' do
-      let!(:other_snake_uuid) { game.spawn_snake("other", x: 3, y: 3) }
+      let!(:other_snake_uuid) { game.spawn_test_snake("other", x: 3, y: 3) }
 
       before do
         game.add_intent(snake_id, 'N')
@@ -68,7 +68,7 @@ describe Game do
       it 'should do nothing' do
         game.tick
 
-        expect(game.snakes.length).to eq(2)
+        expect(game.alive_snakes.length).to eq(2)
         expect(game.dead_snakes).to be_empty
       end
     end
@@ -83,12 +83,12 @@ describe Game do
         game.tick
 
         expect(game.dead_snakes.length).to eq(1)
-        expect(game.snakes).to be_empty
+        expect(game.alive_snakes).to be_empty
       end
     end
 
     context "when colliding with another snake" do
-      let!(:other_snake_uuid) { game.spawn_snake("other", x: 3, y: 3) }
+      let!(:other_snake_uuid) { game.spawn_test_snake("other", x: 3, y: 3) }
 
       before do
         game.add_intent(snake_id, 'E')
@@ -98,7 +98,7 @@ describe Game do
       it 'should kill the snake that is colliding' do
         game.tick
 
-        expect(game.snakes.map(&:uuid)).to eq([other_snake_uuid])
+        expect(game.alive_snakes.map(&:uuid)).to eq([other_snake_uuid])
         expect(game.dead_snakes.length).to eq(1)
       end
     end
@@ -112,13 +112,13 @@ describe Game do
       it 'should kill the snake' do
         game.tick
 
-        expect(game.snakes).to be_empty
+        expect(game.alive_snakes).to be_empty
         expect(game.dead_snakes.length).to eq(1)
       end
     end
 
     context "when a head on collision" do
-      let!(:other_snake_uuid) { game.spawn_snake("other", x: 3, y: 3) }
+      let!(:other_snake_uuid) { game.spawn_test_snake("other", x: 3, y: 3) }
 
       before do
         game.add_intent(snake_id, 'E')
@@ -128,7 +128,7 @@ describe Game do
       it 'should kill both snakes' do
         game.tick
 
-        expect(game.snakes).to be_empty
+        expect(game.alive_snakes).to be_empty
         expect(game.dead_snakes.length).to eq(2)
       end
     end

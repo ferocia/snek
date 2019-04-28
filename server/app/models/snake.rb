@@ -5,12 +5,15 @@ class Snake
 
   attr_accessor :name, :uuid, :head, :intent, :last_intent, :segments
 
-  def initialize(name:, initial_position:)
+  def initialize(name)
     @name = name
-    @head = initial_position
     @uuid = SecureRandom.uuid
     @segments = []
     @last_intent = ['N', 'S', 'E', 'W'].sample
+  end
+
+  def set_position(initial_position)
+    @head = initial_position
   end
 
   def move(new_tile, should_grow)
@@ -29,15 +32,25 @@ class Snake
     @uuid == other.uuid
   end
 
-  def collides_with?(other)
-    tiles_to_check_for_collisions = if self == other
-      @segments.include?(@head)
+  def occupied_space
+    [@head] + @segments
+  end
+
+  def self.new_snakes
+    members = $redis.smembers("new_snakes")
+
+    if members.any?
+      $redis.mget(members).compact.map{|data|
+        Marshal.load(data)
+      }
     else
-      other.occupied_space.include?(@head)
+      []
     end
   end
 
-  def occupied_space
-    [@head] + @segments
+  # Should probably just use AR at this point hey...
+  def save
+    $redis.set("snake_#{@uuid}", Marshal.dump(self))
+    $redis.sadd("new_snakes", "snake_#{@uuid}")
   end
 end
