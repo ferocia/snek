@@ -16,6 +16,8 @@ class Game
       Tile.new(x: x, y: y, type: type)
     } }
 
+    $redis.set "map", Marshal.dump(world)
+
     @safe_tiles = @world.flatten.reject(&:wall?)
   end
 
@@ -78,15 +80,14 @@ class Game
 
   def as_json(options = nil)
     {
-      map: @world,
-      snakes: @all_snakes
+      alive_snakes: @alive_snakes.map(&:to_game_hash)
     }
   end
 
   private
 
   def process_intents(should_grow:)
-    @all_snakes.each do |snake|
+    @alive_snakes.each do |snake|
       current_position = snake.head
       new_y, new_x = case snake.intent || snake.last_intent
       when 'N' then [current_position.y - 1, current_position.x]

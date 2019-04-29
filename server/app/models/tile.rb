@@ -25,6 +25,10 @@ class Tile
     end
   end
 
+  def position
+    {x: @x, y: @y}
+  end
+
   def wall?
     @type == :wall
   end

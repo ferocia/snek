@@ -1,5 +1,6 @@
 namespace :game do
   task :run => [:environment] do
+    $redis.flushdb
     game = Game.new
     game.setup
     loop do

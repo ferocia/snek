@@ -3,12 +3,18 @@ require 'securerandom'
 class Snake
   include ActiveModel::Serialization
 
-  attr_accessor :name, :uuid, :head, :intent, :last_intent, :segments
+  COLORS = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080']
+
+  attr_accessor :intent, :segments
+  attr_reader :name, :uuid, :auth_token, :head, :last_intent, :color
 
   def initialize(name)
     @name = name
     @uuid = SecureRandom.uuid
+    # Used to secure moves with the player
+    @auth_token = SecureRandom.uuid
     @segments = []
+    @color = COLORS.sample
     @last_intent = ['N', 'S', 'E', 'W'].sample
   end
 
@@ -36,13 +42,26 @@ class Snake
     [@head] + @segments
   end
 
+  def to_game_hash
+    {
+      uuid: @uuid,
+      name: @name,
+      head: @head.position,
+      length: length,
+      body: @segments.map(&:position)
+    }
+  end
+
   def self.new_snakes
     members = $redis.smembers("new_snakes")
 
     if members.any?
-      $redis.mget(members).compact.map{|data|
+      snakes = $redis.mget(members).compact.map{|data|
         Marshal.load(data)
       }
+      $redis.del(members)
+
+      snakes
     else
       []
     end
