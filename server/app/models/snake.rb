@@ -1,75 +1,62 @@
 require 'securerandom'
 
-class Snake
-  include ActiveModel::Serialization
-
+class Snake < ApplicationRecord
   COLORS = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080']
 
-  attr_accessor :intent, :segments
-  attr_reader :name, :uuid, :auth_token, :head, :last_intent, :color
+  validates :name, presence: true
 
-  def initialize(name)
-    @name = name
-    @uuid = SecureRandom.uuid
-    # Used to secure moves with the player
-    @auth_token = SecureRandom.uuid
-    @segments = []
-    @color = COLORS.sample
-    @last_intent = ['N', 'S', 'E', 'W'].sample
+  before_create :setup_snake
+
+  def self.new_snakes
+    where(head_position: nil)
   end
 
-  def set_position(initial_position)
-    @head = initial_position
+  def setup_snake
+    # Used to secure moves with the player
+    self.auth_token = SecureRandom.uuid
+    self.last_intent = ['N', 'S', 'E', 'W'].sample
+    self.color = COLORS.sample
+  end
+
+  def head
+    Position.new(self.head_position)
+  end
+
+  def segments
+    self.segment_positions.map{|sp|
+      Position.new(sp)
+    }
+  end
+
+  def set_position(initial_tile)
+    self.head_position = initial_tile.to_h
+    save!
   end
 
   def move(new_tile, should_grow)
-    @segments.unshift @head
-    @segments.pop unless should_grow
-    @head = new_tile
-    @last_intent = @intent
-    @intent = nil
+    segment_positions.unshift head_position
+    segment_positions.pop unless should_grow
+    self.head_position = new_tile.to_h
+    self.last_intent = self.intent || self.last_intent
+    self.intent = nil
+    save!
   end
 
   def length
-    @segments.count + 1
-  end
-
-  def ==(other)
-    @uuid == other.uuid
+    segments.count + 1
   end
 
   def occupied_space
-    [@head] + @segments
+    [head] + segments
   end
 
   def to_game_hash
     {
-      uuid: @uuid,
-      name: @name,
-      head: @head.position,
+      id: id,
+      name: name,
+      head: head,
       length: length,
-      body: @segments.map(&:position)
+      body: segments
     }
-  end
-
-  def self.new_snakes
-    members = $redis.smembers("new_snakes")
-
-    if members.any?
-      snakes = $redis.mget(members).compact.map{|data|
-        Marshal.load(data)
-      }
-      $redis.del(members)
-
-      snakes
-    else
-      []
-    end
-  end
-
-  # Should probably just use AR at this point hey...
-  def save
-    $redis.set("snake_#{@uuid}", Marshal.dump(self))
-    $redis.sadd("new_snakes", "snake_#{@uuid}")
   end
 end

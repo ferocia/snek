@@ -22,12 +22,12 @@ class Game
   end
 
   def spawn_test_snake(name, x: , y: )
-    snake = Snake.new(name)
+    snake = Snake.create(name: name, ip_address: '127.0.0.1')
     snake.set_position(@world[y][x])
 
     @all_snakes.push(snake)
     @alive_snakes.push(snake)
-    snake.uuid
+    snake.id
   end
 
   def add_intent(snake_id, direction)
@@ -63,7 +63,7 @@ class Game
   end
 
   def find_snake(snake_id)
-    @all_snakes.detect{|s| s.uuid == snake_id }
+    @all_snakes.detect{|s| s.id == snake_id }
   end
 
   def to_s
@@ -106,7 +106,7 @@ class Game
     unsafe_tiles_this_tick = @alive_snakes.map(&:occupied_space).flatten
 
     dying_snakes = @alive_snakes.select do |snake|
-      snake.head.wall? ||
+      tile_for(snake.head).wall? ||
       # We expect the head to be in the list - if it's there a second time though,
       # that's a collision with either self of another snake
       unsafe_tiles_this_tick.count(snake.head) > 1
@@ -114,5 +114,9 @@ class Game
 
     @dead_snakes += dying_snakes
     @alive_snakes = @alive_snakes - dying_snakes
+  end
+
+  def tile_for(position)
+    @world[position.y][position.x]
   end
 end

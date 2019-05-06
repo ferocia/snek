@@ -58,11 +58,11 @@ describe Game do
 
   describe "collisions" do
     context 'when there is no collision' do
-      let!(:other_snake_uuid) { game.spawn_test_snake("other", x: 3, y: 3) }
+      let!(:other_snake_id) { game.spawn_test_snake("other", x: 3, y: 3) }
 
       before do
         game.add_intent(snake_id, 'N')
-        game.add_intent(other_snake_uuid, 'E')
+        game.add_intent(other_snake_id, 'E')
       end
 
       it 'should do nothing' do
@@ -88,24 +88,25 @@ describe Game do
     end
 
     context "when colliding with another snake" do
-      let!(:other_snake_uuid) { game.spawn_test_snake("other", x: 3, y: 3) }
+      let!(:other_snake_id) { game.spawn_test_snake("other", x: 3, y: 3) }
 
       before do
         game.add_intent(snake_id, 'E')
-        game.add_intent(other_snake_uuid, 'N')
+        game.add_intent(other_snake_id, 'N')
       end
 
       it 'should kill the snake that is colliding' do
         game.tick
 
-        expect(game.alive_snakes.map(&:uuid)).to eq([other_snake_uuid])
+        expect(game.alive_snakes.map(&:id)).to eq([other_snake_id])
         expect(game.dead_snakes.length).to eq(1)
       end
     end
 
     context "when colliding with self" do
       before do
-        snake.segments = [game.world[3][1]]
+        snake.segment_positions = [game.world[3][1].to_h]
+        snake.save
         game.add_intent(snake_id, 'W')
       end
 
@@ -118,11 +119,11 @@ describe Game do
     end
 
     context "when a head on collision" do
-      let!(:other_snake_uuid) { game.spawn_test_snake("other", x: 3, y: 3) }
+      let!(:other_snake_id) { game.spawn_test_snake("other", x: 3, y: 3) }
 
       before do
         game.add_intent(snake_id, 'E')
-        game.add_intent(other_snake_uuid, 'W')
+        game.add_intent(other_snake_id, 'W')
       end
 
       it 'should kill both snakes' do

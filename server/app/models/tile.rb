@@ -25,6 +25,10 @@ class Tile
     end
   end
 
+  def to_h
+    position
+  end
+
   def position
     {x: @x, y: @y}
   end
