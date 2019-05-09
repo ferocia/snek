@@ -18,7 +18,7 @@ EventMachine.run do
   client = ActionCableClient.new(uri, 'ClientChannel', true, {'Origin' => "foo"})
 
   client.connected {
-    puts 'successfully connected.'
+    puts "successfully connected. You can watch at http://#{SNEK_HOST}"
   }
 
   client.received do |payload|
@@ -30,9 +30,10 @@ EventMachine.run do
 
     if !rando
       # Oh no - there is no rando.  Let's make one
-      response = $client.register_snake("Rando Carlrissian #{rand(123123)}")
+      snake_name = "Rando Carlrissian #{rand(123123)}"
+      response = $client.register_snake(snake_name)
       @snake_id = response.fetch("snake_id")
-      @auth_token = response.fetch("auth_token")
+      @auth_token = response.fetch("auth_token") # Auth token is required to authenticate moves for our snake
     else
       # Yay - rando lives on - Let's get a move
       move = RandomSnake.new(rando, game_state, @map).get_intent

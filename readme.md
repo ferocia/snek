@@ -25,4 +25,4 @@ Become the biggest snek.
 
 ## How to do it
 
-You connect to the server via websockets - there's a sample client and utility code in `/sample`
+You connect to the server via websockets - there's a sample client and utility code in `/client`
