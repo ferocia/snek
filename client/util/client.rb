@@ -7,8 +7,8 @@ class Client
     post("/register_snake", {name: name})
   end
 
-  def send_intent(direction, auth_token)
-
+  def set_intent(snake_id, intent, auth_token)
+    post("/set_intent", {id: snake_id, intent: intent, auth_token: auth_token})
   end
 
   def map

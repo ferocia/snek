@@ -1,0 +1,2 @@
+class LeaderboardEntry < ApplicationRecord
+end

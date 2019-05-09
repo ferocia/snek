@@ -14,6 +14,10 @@
  *= require_self
  */
 
+ html, body {
+  font-family: Helvetica, Arial, sans-serif;
+ }
+
 .map {
   width: 75%;
   max-height: 100vh;
@@ -37,4 +41,31 @@
 .row {
   display: flex;
   justify-content: space-around;
+}
+
+
+.snake {
+  width: 100%;
+  height: 100%;
+}
+
+.head {
+  border-radius: 100px;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.4);
+}
+
+.snake-name {
+  position: absolute;
+  top: -15px;
+  left: 10px;
+  background-color: black;
+  color: #fff;
+  opacity: 0.8;
+  padding: 3px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.body {
 }

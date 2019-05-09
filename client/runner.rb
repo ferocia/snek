@@ -26,18 +26,18 @@ EventMachine.run do
 
     game_state = payload.fetch("message")
 
-    rando = game_state.fetch("alive_snakes").detect{|snake| snake.fetch("uuid") == @snake_id }
+    rando = game_state.fetch("alive_snakes").detect{|snake| snake.fetch("id") == @snake_id }
 
     if !rando
       # Oh no - there is no rando.  Let's make one
       response = $client.register_snake("Rando Carlrissian #{rand(123123)}")
-      @snake_id = response.fetch("snake_uuid")
+      @snake_id = response.fetch("snake_id")
       @auth_token = response.fetch("auth_token")
     else
       # Yay - rando lives on - Let's get a move
       move = RandomSnake.new(rando, game_state, @map).get_intent
       puts "Moving #{move}"
-      $client.send_intent(move, @auth_token)
+      $client.set_intent(@snake_id, move, @auth_token)
     end
   end
 end

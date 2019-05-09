@@ -1,12 +1,11 @@
 class Game
   include ActiveModel::Serialization
-  attr_accessor :world, :iteration, :all_snakes, :dead_snakes, :alive_snakes
+  attr_accessor :world, :iteration, :all_snakes, :alive_snakes
 
   def setup(width: 100, height: 100)
     @iteration = 0
     @all_snakes = []
     @alive_snakes = []
-    @dead_snakes = []
     @width = width
     @height = height
     @world = Array.new(height) {|y| Array.new(width) {|x|
@@ -52,6 +51,7 @@ class Game
   end
 
   def tick
+    @alive_snakes = Snake.alive.all
     # Snakes grow every 5 ticks
     process_intents(should_grow: @iteration % 5 == 0)
 
@@ -112,7 +112,7 @@ class Game
       unsafe_tiles_this_tick.count(snake.head) > 1
     end
 
-    @dead_snakes += dying_snakes
+    dying_snakes.each(&:destroy)
     @alive_snakes = @alive_snakes - dying_snakes
   end
 

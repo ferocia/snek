@@ -2,8 +2,10 @@ require 'securerandom'
 
 class Snake < ApplicationRecord
   COLORS = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080']
+  VALID_MOVES = ['N', 'S', 'E', 'W']
 
   validates :name, presence: true
+  validates :intent, inclusion: VALID_MOVES, allow_blank: true
 
   before_create :setup_snake
 
@@ -11,10 +13,14 @@ class Snake < ApplicationRecord
     where(head_position: nil)
   end
 
+  def self.alive
+    where.not(head_position: nil)
+  end
+
   def setup_snake
     # Used to secure moves with the player
     self.auth_token = SecureRandom.uuid
-    self.last_intent = ['N', 'S', 'E', 'W'].sample
+    self.last_intent = VALID_MOVES.sample
     self.color = COLORS.sample
   end
 
@@ -55,6 +61,7 @@ class Snake < ApplicationRecord
       id: id,
       name: name,
       head: head,
+      color: color,
       length: length,
       body: segments
     }
