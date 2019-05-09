@@ -20,15 +20,6 @@ class Game
     @safe_tiles = @world.flatten.reject(&:wall?)
   end
 
-  def add_intent(snake_id, direction)
-    snake = find_snake(snake_id)
-
-    if snake
-      snake.intent = direction
-      snake.save!
-    end
-  end
-
   def spawn_new_snakes
     new_snakes = Snake.new_snakes
 
