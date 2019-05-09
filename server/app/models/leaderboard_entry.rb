@@ -1,2 +1,0 @@
-class LeaderboardEntry < ApplicationRecord
-end

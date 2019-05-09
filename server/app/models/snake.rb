@@ -14,7 +14,15 @@ class Snake < ApplicationRecord
   end
 
   def self.alive
-    where.not(head_position: nil)
+    where(died_at: nil).where.not(head_position: nil)
+  end
+
+  def self.leaderboard
+    where("length > 0").order("length DESC").limit(20)
+  end
+
+  def alive?
+    head_position.present? && died_at.nil?
   end
 
   def setup_snake
@@ -45,11 +53,12 @@ class Snake < ApplicationRecord
     self.head_position = new_tile.to_h
     self.last_intent = self.intent || self.last_intent
     self.intent = nil
+    self.length = segment_positions.count + 1 # For head
     save!
   end
 
-  def length
-    segments.count + 1
+  def kill
+    update_attributes!(died_at: Time.current)
   end
 
   def occupied_space

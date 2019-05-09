@@ -69,30 +69,48 @@ class Game extends React.Component {
 
 
   renderMap() {
-    if (this.state && this.state.map) {
+    if (this.state.map) {
       return this.state.map.map((row, index) => this.renderRow(row, index))
     } else {
       return (<div>Waiting for data</div>);
     }
   }
 
-  renderSnakes() {
-    if (this.state.game && this.state.game.alive_snakes) {
-      return this.state.game.alive_snakes.map(snake => this.renderSnake(snake))
+  renderLeaderboard() {
+    if (this.state.game) {
+      const entries = this.state.game.leaderboard.map((entry) => this.renderLeaderboardEntry(entry));
+      return (
+        <ol>
+          {entries}
+        </ol>
+      );
+    } else {
+      return null;
     }
+  }
+
+  renderLeaderboardEntry(entry) {
+    return (
+      <li>
+        <span className="name">{entry.name}</span> -
+        <span className="length">{entry.length}</span>
+      </li>
+    );
   }
 
   render() {
     return (
-      <div>
+      <div className="container">
         <ActionCableConsumer
           channel={{channel: 'ClientChannel'}}
           onReceived={this.handleGameTick}
         >
-          <div className="leaderboard">
-          </div>
           <div className="map">
             {this.renderMap()}
+          </div>
+          <div className="leaderboard">
+            <h1>Snek.</h1>
+            {this.renderLeaderboard()}
           </div>
         </ActionCableConsumer>
       </div>

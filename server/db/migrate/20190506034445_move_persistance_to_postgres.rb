@@ -9,12 +9,8 @@ class MovePersistanceToPostgres < ActiveRecord::Migration[5.2]
       t.string :last_intent, null: false
       t.string :ip_address, null: false
       t.string :auth_token, null: false
-      t.timestamps
-    end
-
-    create_table :leaderboard_entries do |t|
-      t.string :name, null: false
-      t.integer :length, null: false
+      t.integer :length, null: false, default: 0
+      t.datetime :died_at
       t.timestamps
     end
   end

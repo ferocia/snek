@@ -80,7 +80,10 @@ class Game
 
   def as_json(options = nil)
     {
-      alive_snakes: @alive_snakes.map(&:to_game_hash)
+      alive_snakes: @alive_snakes.map(&:to_game_hash),
+      leaderboard: Snake.leaderboard.map{|snake|
+        {name: snake.name, length: snake.length, isAlive: snake.alive?}
+      }
     }
   end
 
@@ -112,7 +115,7 @@ class Game
       unsafe_tiles_this_tick.count(snake.head) > 1
     end
 
-    dying_snakes.each(&:destroy)
+    dying_snakes.each(&:kill)
     @alive_snakes = @alive_snakes - dying_snakes
   end
 

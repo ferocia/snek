@@ -18,9 +18,20 @@
   font-family: Helvetica, Arial, sans-serif;
  }
 
-.map {
-  width: 75%;
+.container {
   max-height: 100vh;
+  display: flex;
+}
+
+.map {
+  flex: 1 0 auto;
+  width: 75%;
+}
+
+.leaderboard {
+  padding: 10px 20px;
+  flex: 1 0 auto;
+  width: 25%;
 }
 
 .tile {

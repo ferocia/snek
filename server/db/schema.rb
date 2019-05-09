@@ -15,13 +15,6 @@ ActiveRecord::Schema.define(version: 2019_05_06_034445) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "leaderboard_entries", force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "length", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "snakes", force: :cascade do |t|
     t.string "name", null: false
     t.jsonb "head_position"
@@ -31,6 +24,8 @@ ActiveRecord::Schema.define(version: 2019_05_06_034445) do
     t.string "last_intent", null: false
     t.string "ip_address", null: false
     t.string "auth_token", null: false
+    t.integer "length", default: 0, null: false
+    t.datetime "died_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
