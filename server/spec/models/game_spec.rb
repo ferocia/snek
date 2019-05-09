@@ -1,21 +1,29 @@
 require 'rails_helper'
 
 describe Game do
-  let(:game) { Game.new }
+  def create_test_snake(name, x: , y: )
+    snake = Snake.create(name: name, ip_address: '127.0.0.1')
+    snake.set_position({x: x, y: y})
+
+    snake
+  end
+
+
+  let!(:game) { Game.new }
 
   before do
     game.setup(width: 10, height: 8)
   end
 
-  let(:snake_id) { game.spawn_test_snake("mike", x: 2, y: 3) }
-  let(:snake) { Snake.find(snake_id) }
+  let(:snake) { create_test_snake("mike", x: 2, y: 3) }
 
   describe "snake movement" do
     context "when the snake has registered an intent" do
       it 'should move the snake in that direction' do
-        game.add_intent(snake_id, 'N')
+        snake.set_intent('N')
 
         game.tick
+        snake.reload
         position = snake.head
         expect(position.x).to eq(2)
         expect(position.y).to eq(2)
@@ -60,11 +68,11 @@ describe Game do
 
   describe "collisions" do
     context 'when there is no collision' do
-      let!(:other_snake_id) { game.spawn_test_snake("other", x: 3, y: 3) }
+      let!(:other_snake) { create_test_snake("other", x: 3, y: 3) }
 
       before do
-        game.add_intent(snake_id, 'N')
-        game.add_intent(other_snake_id, 'E')
+        snake.set_intent('N')
+        other_snake.set_intent('E')
       end
 
       it 'should do nothing' do
@@ -78,7 +86,7 @@ describe Game do
     context "when running off the board or into an obstacle" do
       before do
         game.world[3][3].type = :wall
-        game.add_intent(snake_id, 'E')
+        snake.set_intent('E')
       end
 
       it 'should kill the snake' do
@@ -90,17 +98,17 @@ describe Game do
     end
 
     context "when colliding with another snake" do
-      let!(:other_snake_id) { game.spawn_test_snake("other", x: 3, y: 3) }
+      let!(:other_snake) { create_test_snake("other", x: 3, y: 3) }
 
       before do
-        game.add_intent(snake_id, 'E')
-        game.add_intent(other_snake_id, 'N')
+        snake.set_intent('E')
+        other_snake.set_intent('N')
       end
 
       it 'should kill the snake that is colliding' do
         game.tick
 
-        expect(Snake.alive.map(&:id)).to eq([other_snake_id])
+        expect(Snake.alive.map(&:id)).to eq([other_snake.id])
         expect(Snake.dead.length).to eq(1)
       end
     end
@@ -109,7 +117,7 @@ describe Game do
       before do
         snake.segment_positions = [game.world[3][1].to_h]
         snake.save
-        game.add_intent(snake_id, 'W')
+        snake.set_intent('W')
       end
 
       it 'should kill the snake' do
@@ -121,11 +129,11 @@ describe Game do
     end
 
     context "when a head on collision" do
-      let!(:other_snake_id) { game.spawn_test_snake("other", x: 3, y: 3) }
+      let!(:other_snake) { create_test_snake("other", x: 3, y: 3) }
 
       before do
-        game.add_intent(snake_id, 'E')
-        game.add_intent(other_snake_id, 'W')
+        snake.set_intent('E')
+        other_snake.set_intent('W')
       end
 
       it 'should kill both snakes' do

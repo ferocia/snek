@@ -46,8 +46,13 @@ class Snake < ApplicationRecord
     }
   end
 
+  def set_intent(intent)
+    update_attributes!(intent: intent)
+  end
+
   def set_position(initial_tile)
     self.head_position = initial_tile.to_h
+    self.length = 1
     save!
   end
 
