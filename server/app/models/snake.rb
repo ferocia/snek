@@ -22,7 +22,7 @@ class Snake < ApplicationRecord
   end
 
   def self.leaderboard
-    where("length > 0").order("length DESC").limit(20)
+    where("length > 0").order("length DESC, id ASC").limit(20)
   end
 
   def alive?

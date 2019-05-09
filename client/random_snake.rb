@@ -31,13 +31,13 @@ class RandomSnake
     # An exercise for the reader!
 
     if @current_position.fetch("x") < 10
-      "N"
-    elsif @current_position.fetch("x") > 90
-      "S"
-    elsif @current_position.fetch("y") > 90
-      "W"
-    elsif @current_position.fetch("y") < 10
       "E"
+    elsif @current_position.fetch("x") > 90
+      "W"
+    elsif @current_position.fetch("y") > 90
+      "N"
+    elsif @current_position.fetch("y") < 10
+      "S"
     else
       possible_moves.first
     end

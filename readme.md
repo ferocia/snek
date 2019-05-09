@@ -26,3 +26,13 @@ Become the biggest snek.
 ## How to do it
 
 You connect to the server via websockets - there's a sample client and utility code in `/client`
+
+## PR's Welcome!
+
+If you feel like chipping in there's loads of things you could do.  Maybe:
+
+  - Add some obstacles to the map
+  - Improve the styling of the front end
+  - Make the snakes look better
+  - Improve the error handling of the client code
+  - Surely it needs sound effects right?

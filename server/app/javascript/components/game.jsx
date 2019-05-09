@@ -92,7 +92,7 @@ class Game extends React.Component {
   renderLeaderboardEntry(entry) {
     return (
       <li>
-        <span className="name">{entry.name}</span> -
+        <span className="name">{entry.name}</span>
         <span className="length">{entry.length}</span>
       </li>
     );

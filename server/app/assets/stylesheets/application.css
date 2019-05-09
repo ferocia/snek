@@ -19,19 +19,28 @@
  }
 
 .container {
-  max-height: 100vh;
-  display: flex;
 }
 
 .map {
-  flex: 1 0 auto;
-  width: 75%;
+  width: 100vw;
+  height: 100vw;
+  max-height: 100vh;
+  max-width: 100vh;
+  position: absolute;
+  padding: 20px;
+  box-sizing: border-box;
+  top:0;bottom:0; /* vertical center */
+  left:0;right:0; /* horizontal center */
 }
 
 .leaderboard {
-  padding: 10px 20px;
-  flex: 1 0 auto;
-  width: 25%;
+  padding: 10px 10px 10px 20px;
+  position: absolute;
+  right: 0px;
+  width: 250px;
+  box-sizing: border-box;
+  z-index: 2;
+  background-color: pink;
 }
 
 .tile {
@@ -79,4 +88,14 @@
 }
 
 .body {
+}
+
+.length {
+  font-weight: bold;
+  display: inline-block;
+  padding-left: 10px;
+}
+
+.name {
+
 }
