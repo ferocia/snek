@@ -8,7 +8,7 @@ describe Game do
   end
 
   let(:snake_id) { game.spawn_test_snake("mike", x: 2, y: 3) }
-  let(:snake) { game.find_snake(snake_id) }
+  let(:snake) { Snake.find(snake_id) }
 
   describe "snake movement" do
     context "when the snake has registered an intent" do
@@ -26,6 +26,7 @@ describe Game do
       it 'should still move the snake according to last intent given' do
         current_position = snake.head
         game.tick
+        snake.reload
         expect(snake.head).to_not eq(current_position)
       end
     end
@@ -51,6 +52,7 @@ describe Game do
       it 'should grow the snake' do
         expect(snake.length).to eq(1)
         game.tick
+        snake.reload
         expect(snake.length).to eq(2)
       end
     end
@@ -68,8 +70,8 @@ describe Game do
       it 'should do nothing' do
         game.tick
 
-        expect(game.alive_snakes.length).to eq(2)
-        expect(game.dead_snakes).to be_empty
+        expect(Snake.alive.length).to eq(2)
+        expect(Snake.dead).to be_empty
       end
     end
 
@@ -82,8 +84,8 @@ describe Game do
       it 'should kill the snake' do
         game.tick
 
-        expect(game.dead_snakes.length).to eq(1)
-        expect(game.alive_snakes).to be_empty
+        expect(Snake.dead.length).to eq(1)
+        expect(Snake.alive).to be_empty
       end
     end
 
@@ -98,8 +100,8 @@ describe Game do
       it 'should kill the snake that is colliding' do
         game.tick
 
-        expect(game.alive_snakes.map(&:id)).to eq([other_snake_id])
-        expect(game.dead_snakes.length).to eq(1)
+        expect(Snake.alive.map(&:id)).to eq([other_snake_id])
+        expect(Snake.dead.length).to eq(1)
       end
     end
 
@@ -113,8 +115,8 @@ describe Game do
       it 'should kill the snake' do
         game.tick
 
-        expect(game.alive_snakes).to be_empty
-        expect(game.dead_snakes.length).to eq(1)
+        expect(Snake.alive).to be_empty
+        expect(Snake.dead.length).to eq(1)
       end
     end
 
@@ -129,8 +131,8 @@ describe Game do
       it 'should kill both snakes' do
         game.tick
 
-        expect(game.alive_snakes).to be_empty
-        expect(game.dead_snakes.length).to eq(2)
+        expect(Snake.alive).to be_empty
+        expect(Snake.dead.length).to eq(2)
       end
     end
   end

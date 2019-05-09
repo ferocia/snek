@@ -13,6 +13,10 @@ class Snake < ApplicationRecord
     where(head_position: nil)
   end
 
+  def self.dead
+    where.not(died_at: nil)
+  end
+
   def self.alive
     where(died_at: nil).where.not(head_position: nil)
   end

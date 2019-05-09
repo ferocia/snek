@@ -21,7 +21,7 @@ class Game
   end
 
   def spawn_test_snake(name, x: , y: )
-    snake = Snake.create(name: name, ip_address: '127.0.0.1')
+    snake = Snake.create(name: name, ip_address: '127.0.0.1', length: 1)
     snake.set_position(@world[y][x])
 
     @all_snakes.push(snake)
@@ -34,6 +34,7 @@ class Game
 
     if snake
       snake.intent = direction
+      snake.save!
     end
   end
 
