@@ -6,10 +6,11 @@ import { ActionCableConsumer } from 'react-actioncable-provider'
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.handleGameTick = this.handleGameTick.bind(this);
     this.state = {};
   }
 
-  handleGameTick = (data) => {
+  handleGameTick(data) {
     this.setState({game: data});
   }
 

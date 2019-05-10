@@ -95,8 +95,7 @@
 
 .leaderboard .dead {
   opacity: 0.5;
-  text-decoration: strikethrough;
-  font-style: strikethrough;
+  text-decoration: line-through;
 }
 
 .length {
