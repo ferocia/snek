@@ -12,6 +12,10 @@ class Game
       type = if x == 0 || y == 0 || x == width - 1 || y == height - 1
         :wall
       end
+
+      if rand(100) == 1
+        type = :wall
+      end
       Tile.new(x: x, y: y, type: type)
     } }
 
