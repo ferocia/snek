@@ -31,7 +31,7 @@ You connect to the server via websockets - there's a sample client and utility c
 
 If you feel like chipping in there's loads of things you could do.  Maybe:
 
-  - Add some obstacles to the map
+  - Add some better obstacles to the map
   - Improve the styling of the front end
   - Make the snakes look better
   - Add food

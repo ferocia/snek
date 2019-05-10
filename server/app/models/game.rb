@@ -65,7 +65,7 @@ class Game
     {
       alive_snakes: @alive_snakes.map(&:to_game_hash),
       leaderboard: Snake.leaderboard.map{|snake|
-        {name: snake.name, length: snake.length, isAlive: snake.alive?}
+        {id: snake.id, name: snake.name, length: snake.length, isAlive: snake.alive?}
       }
     }
   end

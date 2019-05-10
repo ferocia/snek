@@ -3,7 +3,7 @@ namespace :game do
     $redis.flushdb
     Snake.delete_all
     game = Game.new
-    game.setup
+    game.setup(width: 40, height: 40)
     loop do
       puts "Looping game state"
       time = Time.now

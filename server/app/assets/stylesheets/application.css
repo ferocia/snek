@@ -36,6 +36,7 @@
 }
 
 .leaderboard {
+  margin-top: 20px;
   padding: 10px 10px 10px 20px;
   position: absolute;
   right: 0px;
@@ -49,6 +50,7 @@
   flex: 1 0 auto;
   height:auto;
   min-width: 1px;
+  box-sizing: border-box;
 }
 .tile:before {
   content:'';
@@ -69,13 +71,14 @@
 .snake {
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .head {
   border-radius: 100px;
   position: relative;
-  border: 1px solid rgba(0,0,0,0.4);
   box-sizing: border-box;
+  border: 1px solid rgba(0,0,0,0.4);
 }
 
 .snake-name {
@@ -90,7 +93,10 @@
   white-space: nowrap;
 }
 
-.body {
+.leaderboard .dead {
+  opacity: 0.5;
+  text-decoration: strikethrough;
+  font-style: strikethrough;
 }
 
 .length {
@@ -99,6 +105,3 @@
   padding-left: 10px;
 }
 
-.name {
-
-}
