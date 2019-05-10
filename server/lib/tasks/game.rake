@@ -6,7 +6,9 @@ namespace :game do
     game.setup
     loop do
       puts "Looping game state"
+      time = Time.now
       game.tick
+      puts "Done - #{Time.now - time}"
       ActionCable.server.broadcast 'viewer_channel', game
       sleep 1
     end

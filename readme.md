@@ -17,7 +17,7 @@ You spawn at a random location.
 
 Every 1 second you get a chance to submit a move `["N", "S, "E", "W"]`.  If you don't submit a move, you will move forward.
 
-Every 5 seconds you will grown by one
+Every 5 ticks you will grown by one
 
 If you hit a wall, your snek dies.  If you crash into yourself, your snek dies.  If you hit another snek, your snek dies.  If another snek hits you, that snek dies.  If you head on collide with another snek, both sneks die.
 
@@ -34,5 +34,6 @@ If you feel like chipping in there's loads of things you could do.  Maybe:
   - Add some obstacles to the map
   - Improve the styling of the front end
   - Make the snakes look better
+  - Add food
   - Improve the error handling of the client code
   - Surely it needs sound effects right?

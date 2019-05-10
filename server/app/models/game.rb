@@ -49,10 +49,6 @@ class Game
     @iteration += 1
   end
 
-  def find_snake(snake_id)
-    @all_snakes.detect{|s| s.id == snake_id }
-  end
-
   def to_s
     chars = @world.map{|row| row.map{|tile| tile.to_s }}
     @alive_snakes.each do |snake|

@@ -27,19 +27,28 @@ class RandomSnake
     # Let's evaluate a random move
     possible_moves = ["N", "S", "E", "W"].shuffle
 
-    # Note we should probably avoid walls, or our tail or other snakes hey...
+    # Note we should probably avoid walls, or other snakes hey...
     # An exercise for the reader!
+    possible_moves.reject!{|possible_intent|
+      @our_snake.fetch(:body).include?(next_position(possible_intent).with_indifferent_access)
+    }
 
-    if @current_position.fetch("x") < 10
-      "E"
-    elsif @current_position.fetch("x") > 90
-      "W"
-    elsif @current_position.fetch("y") > 90
+    if possible_moves.empty?
+      # Doh - we're dead anyway
       "N"
-    elsif @current_position.fetch("y") < 10
-      "S"
     else
       possible_moves.first
+    end
+  end
+
+  private
+
+  def next_position(possible_intent)
+    case possible_intent
+    when 'N' then {y: @current_position.fetch(:y) - 1, x: @current_position.fetch(:x)}
+    when 'S' then {y: @current_position.fetch(:y) + 1, x: @current_position.fetch(:x)}
+    when 'E' then {y: @current_position.fetch(:y),     x: @current_position.fetch(:x) + 1}
+    when 'W' then {y: @current_position.fetch(:y),     x: @current_position.fetch(:x) - 1}
     end
   end
 end
