@@ -27,6 +27,25 @@ Become the biggest snek.
 
 You connect to the server via websockets - there's a sample client and utility code in `/client`
 
+
+## Quick start
+
+You need to run 3 processes: the server, the client, and the game.
+
+```
+cd server
+bundle && yarn && rake db:create db:schema:load
+bundle exec rails server
+
+[new tab]
+cd server && bundle exec game:run
+
+[new tab]
+cd client
+bundle && yarn
+bundle exec ruby runner.rb
+```
+
 ## PR's Welcome!
 
 If you feel like chipping in there's loads of things you could do.  Maybe:
