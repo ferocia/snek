@@ -106,7 +106,7 @@ class Game extends React.Component {
 
   renderLeaderboardEntry(entry) {
     return (
-      <li>
+      <li key={"leaderboard" + entry.id} className={entry.isAlive ? "alive" : "dead"}>
         <span className="name">{entry.name}</span>
         <span className="length">{entry.length}</span>
       </li>
