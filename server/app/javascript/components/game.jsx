@@ -117,18 +117,19 @@ class Game extends React.Component {
   render() {
     return (
       <div className="container">
-        <ActionCableConsumer
-          channel={{channel: 'ClientChannel'}}
-          onReceived={this.handleGameTick}
-        >
-          <div className="map">
-            {this.renderMap()}
-          </div>
-          <div className="leaderboard">
-            <h1>Snek.</h1>
-            {this.renderLeaderboard()}
-          </div>
-        </ActionCableConsumer>
+        {
+          this.acc || (this.acc = <ActionCableConsumer
+             channel='ClientChannel'
+             onReceived={this.handleGameTick}
+          />)
+        }
+        <div className="map">
+          {this.renderMap()}
+        </div>
+        <div className="leaderboard">
+          <h1>Snek.</h1>
+          {this.renderLeaderboard()}
+        </div>
       </div>
     );
   }
