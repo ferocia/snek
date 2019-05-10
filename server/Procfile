@@ -1,0 +1,2 @@
+web: bundle exec rails s -p 8080
+game: bundle exec rake game:run

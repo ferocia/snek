@@ -81,5 +81,3 @@ test:
 production:
   <<: *default
   database: snek_production
-  username: snek
-  password: <%= ENV['SNEK_DATABASE_PASSWORD'] %>
