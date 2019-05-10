@@ -1,4 +1,7 @@
 <%  content_for :head do %>
+  <script type="text/javascript">
+    window.snek_host = '<%= Rails.env.production? ? 'snek.local:8080' : "localhost:#{request.port}" %>';
+  </script>
   <%= javascript_pack_tag 'app' %>
 <% end %>
 
