@@ -2,8 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { ActionCableProvider } from 'react-actioncable-provider'
-import { API_WS_ROOT } from '../util/constants.js'
 import Game from '../components/game';
+
+const API_WS_ROOT = "ws://" + window.snek_host + "/cable";
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

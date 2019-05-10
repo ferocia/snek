@@ -11,6 +11,9 @@
   </head>
 
   <body>
+    <script type="text/javascript">
+      window.snek_host = '<%= Rails.env.production? ? 'snek.local:8080' : "localhost:#{request.port}" %>';
+    </script>
     <%= yield %>
   </body>
 </html>
