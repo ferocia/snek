@@ -38,7 +38,7 @@ bundle && yarn && rake db:create db:schema:load
 bundle exec rails server
 
 [new tab]
-cd server && bundle exec game:run
+cd server && bundle exec rake game:run
 
 [new tab]
 cd client
