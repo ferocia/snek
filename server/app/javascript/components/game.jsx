@@ -38,6 +38,18 @@ class Game extends React.Component {
       arr[i] = new Array(this.state.map[0].length);
     }
 
+    const items = this.items();
+
+    for(let i = 0; i < items.length; i ++) {
+      const currentItem = items[i];
+
+      arr[currentItem.position.y][currentItem.position.x] = {
+        entityType: currentItem.itemType,
+        className: currentItem.itemType,
+        icon: this.iconForItem(currentItem)
+      }
+    }
+
     const aliveSnakes = this.aliveSnakes();
     for(let i = 0; i < aliveSnakes.length; i ++) {
       let currentSnake = aliveSnakes[i]
@@ -51,17 +63,6 @@ class Game extends React.Component {
       currentSnake.body.map((segment) => { arr[segment.y][segment.x] = {entityType: "snake", color: currentSnake.color, className: "body"} })
     }
 
-    const items = this.items();
-
-    for(let i = 0; i < items.length; i ++) {
-      const currentItem = items[i];
-
-      arr[currentItem.position.y][currentItem.position.x] = {
-        entityType: currentItem.itemType,
-        className: currentItem.itemType,
-        icon: this.iconForItem(currentItem)
-      }
-    }
     return arr;
   }
 
