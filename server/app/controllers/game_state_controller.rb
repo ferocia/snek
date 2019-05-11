@@ -1,9 +1,13 @@
 class GameStateController < ApplicationController
   def register_snake
-    snake = Snake.new(name: params[:name], ip_address: request.remote_ip)
-    snake.save
+    if !Snake.find_by(ip_address: request.remote_ip, died_at: nil)
+      snake = Snake.new(name: params[:name], ip_address: request.remote_ip)
+      snake.save
 
-    render json: {snake_id: snake.id, auth_token: snake.auth_token}
+      render json: {snake_id: snake.id, auth_token: snake.auth_token}
+    else
+      render json: {message: "Sorry - a snake is already registered for your IP"}
+    end
   end
 
   def set_intent
