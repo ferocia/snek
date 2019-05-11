@@ -46,8 +46,12 @@ EventMachine.run do
         @snake_name = "#{`whoami`.chomp} #{rand(123123)}"
         puts "Making a new snake: #{@snake_name}"
         response = $client.register_snake(@snake_name)
-        @snake_id = response.fetch("snake_id")
-        @auth_token = response.fetch("auth_token") # Auth token is required to authenticate moves for our snake
+        if response["snake_id"]
+          @snake_id = response.fetch("snake_id")
+          @auth_token = response.fetch("auth_token") # Auth token is required to authenticate moves for our snake
+        else
+          puts "Didn't get a snake id - got #{response.inspect}"
+        end
       else
         # Yay - my_snake lives on - Let's get a move
         move = RandomSnake.new(my_snake, game_state, @map).get_intent

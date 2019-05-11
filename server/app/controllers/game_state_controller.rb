@@ -4,7 +4,11 @@ class GameStateController < ApplicationController
       snake = Snake.new(name: params[:name], ip_address: request.remote_ip)
       snake.save
 
-      render json: {snake_id: snake.id, auth_token: snake.auth_token}
+      if snake.save
+        render json: {snake_id: snake.id, auth_token: snake.auth_token}
+      else
+        render json: {message: "Sorry - the name you picked is invalid - max 30 chars"}
+      end
     else
       render json: {message: "Sorry - a snake is already registered for your IP"}
     end
