@@ -7,11 +7,30 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.handleGameTick = this.handleGameTick.bind(this);
+
+    this.killMusic = new Audio('./sounds/kill.wav');
+    this.foodPickupMusic = new Audio('./sounds/chomp.wav');
+
     this.state = {};
   }
 
   handleGameTick(data) {
     this.setState({game: data});
+
+    this.playEvents()
+  }
+
+  playEvents() {
+    this.state.game.events.forEach(event => {
+      switch (event.type) {
+        case 'kill':
+          this.killMusic.play()
+          break;
+        case 'food_pickup':
+          this.foodPickupMusic.play()
+          break;
+      }
+    });
   }
 
   componentDidMount() {

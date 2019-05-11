@@ -118,7 +118,15 @@ describe Game do
       snake.reload
 
       expect(snake.items).to eq([{"item_type" => "food", "turns_left" => 5}])
+
       expect(Item.all).to be_empty
+    end
+
+    it 'should record an event' do
+      game.tick
+      snake.reload
+
+      expect(game.events.count).to eq 1
     end
   end
 
@@ -166,6 +174,7 @@ describe Game do
 
         expect(Snake.alive.map(&:id)).to eq([other_snake.id])
         expect(Snake.dead.length).to eq(1)
+        expect(game.events.count).to eq 1
       end
     end
 
