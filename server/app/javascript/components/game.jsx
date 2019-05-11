@@ -18,23 +18,21 @@ class Game extends React.Component {
     this.fetchMap();
   }
 
-  renderRow(row, yPosition, snakeProps) {
+  renderRow(row, yPosition, entityProps) {
     return (
       <div key={"row" + yPosition} className="row">
-        {row.map((tile, xPosition) => this.renderTile(xPosition, yPosition, tile, snakeProps[yPosition][xPosition]))}
+        {row.map((tile, xPosition) => this.renderTile(xPosition, yPosition, tile, entityProps[yPosition][xPosition]))}
       </div>
     );
   }
 
-  renderTile(x, y, tile, snakeProps) {
+  renderTile(x, y, tile, entityProps) {
     return (
-      <div key={"tile" + x + "." + y} className={"tile " + (tile == "#" ? "wall" : "")}>
-        {this.renderSnakeSegment(snakeProps)}
-      </div>
+      <div key={"tile" + x + "." + y} className={"tile " + (tile == "#" ? "wall" : "")}>{this.renderEntity(entityProps)}</div>
     );
   }
 
-  calculateSnakeProps() {
+  calculateEntityProps() {
     let arr = new Array(this.state.map.length);
     for(let i = 0; i < arr.length; i++) {
       arr[i] = new Array(this.state.map[0].length);
@@ -44,14 +42,35 @@ class Game extends React.Component {
     for(let i = 0; i < aliveSnakes.length; i ++) {
       let currentSnake = aliveSnakes[i]
       arr[currentSnake.head.y][currentSnake.head.x] = {
+        entityType: "snake",
         name: currentSnake.name,
         color: currentSnake.color,
         className: "head"
       }
 
-      currentSnake.body.map((segment) => { arr[segment.y][segment.x] = {color: currentSnake.color, className: "body"} })
+      currentSnake.body.map((segment) => { arr[segment.y][segment.x] = {entityType: "snake", color: currentSnake.color, className: "body"} })
+    }
+
+    const items = this.items();
+
+    for(let i = 0; i < items.length; i ++) {
+      const currentItem = items[i];
+
+      arr[currentItem.position.y][currentItem.position.x] = {
+        entityType: currentItem.itemType,
+        className: currentItem.itemType,
+        icon: this.iconForItem(currentItem)
+      }
     }
     return arr;
+  }
+
+  iconForItem(item) {
+    if (item.itemType == 'food') {
+      return '🍕';
+    } else {
+      return '?';
+    }
   }
 
   renderSnakeName(name) {
@@ -62,15 +81,31 @@ class Game extends React.Component {
     }
   }
 
-  renderSnakeSegment(snakeProps) {
-    if (snakeProps) {
-      return (
-        <div className={"snake " + snakeProps.className} style={{backgroundColor: snakeProps.color}}>
-          {this.renderSnakeName(snakeProps.name)}
-        </div>
-      )
+  renderEntity(entityProps) {
+    if (entityProps) {
+      if (entityProps.entityType == "snake") {
+        return (
+          <div className={"snake " + entityProps.className} style={{backgroundColor: entityProps.color}}>
+            {this.renderSnakeName(entityProps.name)}
+          </div>
+        )
+      } else {
+        return (
+          <div className={"entity " + entityProps.className}>
+            {entityProps.icon}
+          </div>
+        )
+      }
     } else {
       return null;
+    }
+  }
+
+  items() {
+    if (this.state.game) {
+      return this.state.game.items;
+    } else {
+      return [];
     }
   }
 
@@ -85,8 +120,8 @@ class Game extends React.Component {
 
   renderMap() {
     if (this.state.map) {
-      const snakeProps = this.calculateSnakeProps();
-      return this.state.map.map((row, index) => this.renderRow(row, index, snakeProps))
+      const entityProps = this.calculateEntityProps();
+      return this.state.map.map((row, index) => this.renderRow(row, index, entityProps))
     } else {
       return (<div>Waiting for data</div>);
     }

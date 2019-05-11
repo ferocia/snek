@@ -10,10 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_06_034445) do
+ActiveRecord::Schema.define(version: 2019_05_10_122452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "items", force: :cascade do |t|
+    t.jsonb "position", null: false
+    t.string "item_type", null: false
+  end
 
   create_table "snakes", force: :cascade do |t|
     t.string "name", null: false
@@ -28,6 +33,7 @@ ActiveRecord::Schema.define(version: 2019_05_06_034445) do
     t.datetime "died_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "items", default: [], null: false
   end
 
 end

@@ -63,7 +63,21 @@ class Snake < ApplicationRecord
     self.last_intent = self.intent || self.last_intent
     self.intent = nil
     self.length = segment_positions.count + 1 # For head
+
+    self.items.each do |item|
+      item["turns_left"] = item["turns_left"].to_i - 1
+    end
+
+    self.items.reject!{|item| item["turns_left"] <= 0 }
     save!
+  end
+
+  def should_grow?(iteration_count)
+
+  end
+
+  def has_food?
+    items.detect{|i| i["item_type"] == "food" }.present?
   end
 
   def kill

@@ -7,7 +7,7 @@ require 'active_support/core_ext/hash/indifferent_access'
 require_relative "./util/client.rb"
 require_relative "./random_snake.rb"
 
-SNEK_HOST = ENV.fetch("SNEK_HOST") { "localhost:3000" }
+SNEK_HOST = ENV.fetch("SNEK_HOST") { "localhost:8080" }
 
 $client = Client.new("http://#{SNEK_HOST}")
 

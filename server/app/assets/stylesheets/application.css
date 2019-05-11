@@ -98,6 +98,10 @@
   text-decoration: line-through;
 }
 
+.entity {
+  position: absolute;
+}
+
 .length {
   font-weight: bold;
   display: inline-block;

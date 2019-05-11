@@ -66,6 +66,21 @@ describe Game do
     end
   end
 
+  describe "collecting an item" do
+    let!(:item) { Item.create(item_type: "food", position: {x: 3, y: 3}) }
+    before do
+      snake.set_intent('E')
+    end
+
+    it 'should pick up the item' do
+      game.tick
+      snake.reload
+
+      expect(snake.items).to eq([{"item_type" => "food", "turns_left" => 5}])
+      expect(Item.all).to be_empty
+    end
+  end
+
   describe "collisions" do
     context 'when there is no collision' do
       let!(:other_snake) { create_test_snake("other", x: 3, y: 3) }

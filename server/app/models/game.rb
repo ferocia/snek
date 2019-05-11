@@ -13,7 +13,7 @@ class Game
         :wall
       end
 
-      if rand(100) == 1
+      if rand(50) == 1
         type = :wall
       end
       Tile.new(x: x, y: y, type: type)
@@ -27,26 +27,48 @@ class Game
   def spawn_new_snakes
     new_snakes = Snake.new_snakes
 
-    possible_spawn_points = @safe_tiles - @alive_snakes.map(&:occupied_space).flatten
+    @possible_spawn_points = @safe_tiles - @alive_snakes.map(&:occupied_space).flatten
 
     new_snakes.each do |snake|
-      spawn_point = possible_spawn_points.sample
+      spawn_point = @possible_spawn_points.sample
       snake.set_position(spawn_point)
       @alive_snakes.push(snake)
-      possible_spawn_points = possible_spawn_points.without(spawn_point)
+      @possible_spawn_points = @possible_spawn_points.without(spawn_point)
     end
   end
 
   def tick
     @alive_snakes = Snake.alive.all
-    # Snakes grow every 5 ticks
-    process_intents(should_grow: @iteration % 5 == 0)
+    @items = Item.all.to_a
+
+    process_intents
+    process_item_pickups
 
     kill_colliding_snakes
 
     spawn_new_snakes
+    spawn_new_items
 
     @iteration += 1
+  end
+
+  def process_item_pickups
+    @items.each do |item|
+      collecting_snake = @alive_snakes.detect{|snake| snake.head == item.tile }
+
+      if collecting_snake
+        collecting_snake.items.push item.to_pickup
+        collecting_snake.save
+        item.destroy
+      end
+    end
+  end
+
+  def spawn_new_items
+    # Always have one item of food to pickup
+    if !@items.any?(&:food?)
+      @items.push Item.create!(item_type: 'food', position: @possible_spawn_points.sample.to_h)
+    end
   end
 
   def to_s
@@ -64,6 +86,9 @@ class Game
   def as_json(options = nil)
     {
       alive_snakes: @alive_snakes.map(&:to_game_hash),
+      items: @items.map{|item|
+        {itemType: item.item_type, position: item.position}
+      },
       leaderboard: Snake.leaderboard.map{|snake|
         {id: snake.id, name: snake.name, length: snake.length, isAlive: snake.alive?}
       }
@@ -72,7 +97,12 @@ class Game
 
   private
 
-  def process_intents(should_grow:)
+  # Snakes grow every 5 ticks or if they have food
+  def should_snake_grow?(snake)
+    snake.has_food? || @iteration % 5 == 0
+  end
+
+  def process_intents
     @alive_snakes.each do |snake|
       current_position = snake.head
       new_y, new_x = case snake.intent || snake.last_intent
@@ -83,7 +113,7 @@ class Game
       else [0, 0] # Dead on invalid move
       end
 
-      snake.move(@world[new_y][new_x], should_grow)
+      snake.move(@world[new_y][new_x], should_snake_grow?(snake))
     end
   end
 
