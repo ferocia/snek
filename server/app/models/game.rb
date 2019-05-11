@@ -6,6 +6,7 @@ class Game
     @iteration = 0
     @all_snakes = []
     @alive_snakes = []
+    @events = []
     @width = width
     @height = height
     @world = Array.new(height) {|y| Array.new(width) {|x|
@@ -40,6 +41,7 @@ class Game
   def tick
     @alive_snakes = Snake.alive.all
     @items = Item.all.to_a
+    @events = []
 
     process_intents
     process_item_pickups
@@ -57,6 +59,7 @@ class Game
       collecting_snake = @alive_snakes.detect{|snake| snake.head == item.tile }
 
       if collecting_snake
+        @events.push(Event.new('food_pickup'))
         collecting_snake.items.push item.to_pickup
         collecting_snake.save
         item.destroy
@@ -88,6 +91,9 @@ class Game
       alive_snakes: @alive_snakes.map(&:to_game_hash),
       items: @items.map{|item|
         {itemType: item.item_type, position: item.position}
+      },
+      events: @events.map{|event|
+        { type: event.type }
       },
       leaderboard: Snake.leaderboard.map{|snake|
         {id: snake.id, name: snake.name, length: snake.length, isAlive: snake.alive?}
@@ -127,6 +133,8 @@ class Game
       # that's a collision with either self of another snake
       unsafe_tiles_this_tick.count(snake.head) > 1
     end
+
+    @events.push(Event.new('kill')) if dying_snakes.any?
 
     dying_snakes.each(&:kill)
     @alive_snakes = @alive_snakes - dying_snakes
