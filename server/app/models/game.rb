@@ -1,6 +1,6 @@
 class Game
   include ActiveModel::Serialization
-  attr_accessor :world, :iteration, :all_snakes, :alive_snakes
+  attr_accessor :world, :iteration, :all_snakes, :alive_snakes, :events
 
   def setup(width: 100, height: 100)
     @iteration = 0
