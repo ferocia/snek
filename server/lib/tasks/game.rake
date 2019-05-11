@@ -10,7 +10,7 @@ namespace :game do
       game.tick
       puts "Done - #{Time.now - time}"
       ActionCable.server.broadcast 'client_channel', game
-      sleep 1
+      sleep 0.5
     end
   end
 end

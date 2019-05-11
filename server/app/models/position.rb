@@ -13,4 +13,13 @@ class Position
   def ==(other)
     @x == other.x && @y == other.y
   end
+
+  def eql?(other)
+    @x == other.x && @y == other.y
+  end
+
+  def hash
+    puts [@x, @y].hash
+    [@x, @y].hash
+  end
 end

@@ -72,10 +72,6 @@ class Snake < ApplicationRecord
     save!
   end
 
-  def should_grow?(iteration_count)
-
-  end
-
   def has_food?
     items.detect{|i| i["item_type"] == "food" }.present?
   end

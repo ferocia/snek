@@ -21,7 +21,7 @@ class Game
 
     $redis.set "map", Marshal.dump(world)
 
-    @safe_tiles = @world.flatten.reject(&:wall?)
+    @safe_tiles = @world.flatten.reject(&:wall?).map(&:to_position)
   end
 
   def spawn_new_snakes
