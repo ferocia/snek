@@ -73,7 +73,7 @@ class Snake < ApplicationRecord
   end
 
   def has_food?
-    items.detect{|i| i["item_type"] == "food" }.present?
+    items.detect{|i| i["item_type"] == "food" || i["item_type"] == "dead_snake" }.present?
   end
 
   def kill

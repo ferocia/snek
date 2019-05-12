@@ -175,6 +175,19 @@ describe Game do
         expect(Snake.alive.map(&:id)).to eq([other_snake.id])
         expect(Snake.dead.length).to eq(1)
         expect(game.events.count).to eq 1
+        expect(Item.find_by(item_type: "dead_snake")).to be_nil
+      end
+
+      context 'when the snake is long' do
+        it 'should create an item' do
+          snake.update_attributes(segment_positions: 11.times.map{ {x: 5,y: 5} } )
+
+          game.tick
+
+          expect(Snake.alive.map(&:id)).to eq([other_snake.id])
+          expect(Snake.dead.length).to eq(1)
+          expect(Item.find_by(item_type: "dead_snake").position).to eq({"x" => 5, "y" => 5})
+        end
       end
     end
 

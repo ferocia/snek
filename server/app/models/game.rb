@@ -137,6 +137,12 @@ class Game
     @events.push(Event.new('kill')) if dying_snakes.any?
 
     dying_snakes.each(&:kill)
+    dying_snakes.each do |dying_snake|
+      if dying_snake.length > 10
+        Item.create!(item_type: 'dead_snake', position: dying_snake.occupied_space.last.to_h)
+      end
+    end
+
     @alive_snakes = @alive_snakes - dying_snakes
   end
 

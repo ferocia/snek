@@ -88,8 +88,8 @@ class Game extends React.Component {
   iconForItem(item) {
     if (item.itemType == 'food') {
       return '🍕';
-    } else {
-      return '?';
+    } else if (item.itemType == 'dead_snake') {
+      return '🍒';
     }
   }
 

@@ -1,5 +1,5 @@
 class Item < ApplicationRecord
-  validates :item_type, inclusion: ["food"]
+  validates :item_type, inclusion: ["food", "dead_snake"]
 
   def tile
     Position.new(position)
@@ -8,6 +8,8 @@ class Item < ApplicationRecord
   def duration
     if food?
       5
+    elsif dead_snake?
+      10
     end
   end
 
@@ -17,5 +19,9 @@ class Item < ApplicationRecord
 
   def food?
     item_type == 'food'
+  end
+
+  def dead_snake?
+    item_type == 'dead_snake'
   end
 end
