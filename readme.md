@@ -33,16 +33,19 @@ You connect to the server via websockets - there's a sample client and utility c
 You need to run 3 processes: the server, the client, and the game.
 
 ```
+# Starting the server
 cd server
 bundle && yarn && rake db:create db:schema:load
-bundle exec rails server
+bundle exec rails server --port 8080
 
 [new tab]
+# Starting the game
 cd server && bundle exec rake game:run
 
 [new tab]
+# Starting the client
 cd client
-bundle && yarn
+bundle
 bundle exec ruby runner.rb
 ```
 
