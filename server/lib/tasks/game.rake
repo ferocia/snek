@@ -1,3 +1,4 @@
+desc 'Start the snek game server'
 namespace :game do
   task :run => [:environment] do
     $redis.flushdb
